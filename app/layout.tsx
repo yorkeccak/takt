@@ -31,7 +31,9 @@ export const metadata: Metadata = {
   icons: {
     icon: [
       { url: "/favicon.ico", sizes: "any" },
+      { url: "/nabla.png", type: "image/png", sizes: "213x213" },
     ],
+    apple: [{ url: "/nabla.png" }],
   },
   openGraph: {
     title: "Takt | AI-Powered Automotive Intelligence",
