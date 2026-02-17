@@ -9,7 +9,7 @@ const en = {
     outputs: "Outputs:",
     deployment: "Enterprise deployment:",
     euData: "EU data residency",
-    ukGov: "Infrastructure already used in UK Government.",
+    ukGov: "Search infrastructure already in use across government and Fortune 1000.",
   },
 
   // ─── Capabilities ───
@@ -264,7 +264,7 @@ const de: Translations = {
     outputs: "Ausgaben:",
     deployment: "Enterprise-Bereitstellung:",
     euData: "EU-Datenresidenz",
-    ukGov: "Infrastruktur bereits in der britischen Regierung im Einsatz.",
+    ukGov: "Suchinfrastruktur bereits im Einsatz bei Regierungen und Fortune 1000.",
   },
 
   capabilities: {
