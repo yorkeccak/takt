@@ -107,13 +107,22 @@ export default function Sidebar({
         const data = await response.json();
         if (data.tasks && data.tasks.length > 0) {
           const mapped: ResearchHistoryItem[] = data.tasks.map(
-            (task: { deepresearch_id: string; query: string; status: string; created_at: number }) => ({
-              id: task.deepresearch_id,
-              title: task.query,
-              researchType: "custom",
-              createdAt: task.created_at ? task.created_at * 1000 : Date.now(),
-              status: task.status as ResearchHistoryItem["status"],
-            })
+            (task: { deepresearch_id: string; query: string; status: string; created_at?: string | number }) => {
+              let createdAt = Date.now();
+              if (task.created_at) {
+                const parsed = typeof task.created_at === "string"
+                  ? new Date(task.created_at).getTime()
+                  : task.created_at < 1e12 ? task.created_at * 1000 : task.created_at;
+                if (!isNaN(parsed)) createdAt = parsed;
+              }
+              return {
+                id: task.deepresearch_id,
+                title: task.query,
+                researchType: "custom",
+                createdAt,
+                status: task.status as ResearchHistoryItem["status"],
+              };
+            }
           );
           setHistory(mapped);
           return;
