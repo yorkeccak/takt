@@ -1,0 +1,568 @@
+import { NextRequest, NextResponse } from "next/server";
+import { Valyu } from "valyu-js";
+import { isSelfHostedMode } from "@/app/lib/app-mode";
+
+const VALYU_APP_URL = process.env.VALYU_APP_URL || "https://platform.valyu.ai";
+
+const getValyuApiKey = () => {
+  const apiKey = process.env.VALYU_API_KEY;
+  if (!apiKey) {
+    throw new Error("VALYU_API_KEY environment variable is required");
+  }
+  return apiKey;
+};
+
+type DeliverableType = "csv" | "xlsx" | "pptx" | "docx" | "pdf";
+
+interface Deliverable {
+  type: DeliverableType;
+  description: string;
+}
+
+async function createResearchWithOAuth(
+  accessToken: string,
+  query: string,
+  deliverables: Deliverable[]
+) {
+  const proxyUrl = `${VALYU_APP_URL}/api/oauth/proxy`;
+
+  const requestBody = {
+    path: "/v1/deepresearch/tasks",
+    method: "POST",
+    body: {
+      query,
+      deliverables,
+      mode: "fast",
+      output_formats: ["markdown", "pdf"],
+    },
+  };
+
+  const response = await fetch(proxyUrl, {
+    method: "POST",
+    headers: {
+      Authorization: `Bearer ${accessToken}`,
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(requestBody),
+  });
+
+  if (!response.ok) {
+    const errorText = await response.text();
+    let errorData;
+    try {
+      errorData = JSON.parse(errorText);
+    } catch {
+      errorData = { message: errorText };
+    }
+
+    if (response.status === 402) {
+      throw new Error("Insufficient credits. Please top up your Valyu account.");
+    }
+
+    if (response.status === 401 || response.status === 403) {
+      throw new Error(`Session expired. Please sign in again. (${response.status}: ${errorData.message || errorData.error || 'Unknown error'})`);
+    }
+
+    throw new Error(errorData.message || errorData.error || "Failed to create research");
+  }
+
+  return response.json();
+}
+
+async function createResearchWithApiKey(
+  query: string,
+  deliverables: Deliverable[]
+) {
+  const valyu = new Valyu(getValyuApiKey());
+  return valyu.deepresearch.create({
+    query,
+    deliverables,
+    mode: "fast",
+  });
+}
+
+export async function POST(request: NextRequest) {
+  try {
+    const authHeader = request.headers.get("Authorization");
+    const accessToken = authHeader?.startsWith("Bearer ")
+      ? authHeader.substring(7)
+      : null;
+
+    const {
+      researchType,
+      researchSubject,
+      researchFocus,
+      industryContext,
+      specificQuestions,
+    } = await request.json();
+
+    if (!researchSubject) {
+      return NextResponse.json(
+        { error: "Research subject is required" },
+        { status: 400 }
+      );
+    }
+
+    const query = buildResearchQuery(
+      researchType,
+      researchSubject,
+      researchFocus,
+      industryContext,
+      specificQuestions
+    );
+
+    const deliverables = buildDeliverables(researchType, researchSubject);
+
+    const selfHosted = isSelfHostedMode();
+
+    if (!selfHosted && !accessToken) {
+      return NextResponse.json(
+        { error: "Sign in for free to start deepresearch", requiresReauth: true },
+        { status: 401 }
+      );
+    }
+
+    let response;
+
+    if (!selfHosted && accessToken) {
+      response = await createResearchWithOAuth(accessToken, query, deliverables);
+    } else {
+      response = await createResearchWithApiKey(query, deliverables);
+    }
+
+    return NextResponse.json({
+      deepresearch_id: response.deepresearch_id,
+      status: "queued",
+    });
+  } catch (error) {
+    console.error("Error creating research task:", error);
+
+    let message = "Failed to start research";
+    let statusCode = 500;
+
+    if (error instanceof Error) {
+      message = error.message;
+      if ("status" in error && typeof (error as { status: number }).status === "number") {
+        statusCode = (error as { status: number }).status;
+      }
+      if (message.includes("Insufficient credits")) {
+        statusCode = 402;
+      } else if (message.includes("Session expired") || message.includes("sign in")) {
+        statusCode = 401;
+      }
+    }
+
+    return NextResponse.json({ error: message }, { status: statusCode });
+  }
+}
+
+function buildResearchQuery(
+  researchType: string,
+  researchSubject: string,
+  researchFocus?: string,
+  industryContext?: string,
+  specificQuestions?: string
+): string {
+  let baseQuery = "";
+
+  switch (researchType) {
+    case "supplier":
+      baseQuery = `
+Conduct a comprehensive supplier intelligence and due diligence report on ${researchSubject}.
+
+Provide detailed analysis covering:
+
+1. **Supplier Overview**
+   - Company history, founding, and key milestones
+   - Headquarters location, manufacturing facilities, and global presence
+   - Company size (employees, revenue, production capacity)
+   - Ownership structure and parent company relationships
+
+2. **Financial Health Assessment**
+   - Revenue trends and growth rates
+   - Profitability metrics and margins
+   - Debt levels and credit ratings
+   - Recent financial performance and outlook
+   - SEC filing disclosures (if publicly traded)
+   - Funding history (if private)
+
+3. **Product & Technology Portfolio**
+   - Core products and materials supplied
+   - Manufacturing processes and capabilities
+   - Quality certifications (IATF 16949, ISO 9001, etc.)
+   - Patent portfolio relevant to automotive applications
+   - R&D investment and innovation pipeline
+
+4. **Supply Chain Risk Assessment**
+   - Geographic concentration of operations
+   - Raw material sourcing dependencies
+   - Tier 2/3 supplier risks
+   - Single-source risks and alternatives
+   - Natural disaster and geopolitical exposure
+   - Historical supply disruptions
+
+5. **ESG & Sustainability Profile**
+   - Environmental compliance record
+   - Carbon footprint and emissions data
+   - Conflict minerals and responsible sourcing policies
+   - Labor practices and human rights record
+   - LkSG (German Supply Chain Due Diligence Act) compliance indicators
+   - EU Battery Regulation readiness
+
+6. **Regulatory & Compliance**
+   - Regulatory violations or investigations
+   - Product recalls or safety issues
+   - Sanctions screening results
+   - Export control considerations
+   - Environmental permits and compliance status
+
+7. **Competitive Position**
+   - Market share in relevant segments
+   - Key competitors and alternatives
+   - Pricing competitiveness
+   - Technology differentiation
+   - Customer concentration risk
+
+8. **Risk Matrix & Recommendations**
+   - Overall risk rating (financial, operational, ESG, regulatory)
+   - Key risk factors and mitigation strategies
+   - Recommended monitoring indicators
+   - Alternative supplier recommendations
+`;
+      break;
+
+    case "patent":
+      baseQuery = `
+Conduct a comprehensive patent landscape analysis for ${researchSubject} in the automotive sector.
+
+Provide detailed analysis covering:
+
+1. **Technology Overview**
+   - Definition and scope of the technology area
+   - Current state of the art
+   - Key technical challenges and breakthroughs
+   - Relationship to automotive applications
+
+2. **Patent Landscape Summary**
+   - Total patent filings in this space (by year, showing trends)
+   - Geographic distribution of filings (USPTO, EPO, WIPO, CNIPA, JPO)
+   - Patent type breakdown (utility, design, PCT applications)
+   - Filing velocity trends and acceleration/deceleration
+
+3. **Key Patent Holders**
+   - Top 10-20 assignees by patent count
+   - Market share of patent portfolio by assignee
+   - Filing trends per major assignee
+   - Portfolio strength assessment (citation analysis, family size)
+   - OEM vs. supplier vs. university/research institution breakdown
+
+4. **Technology Clustering**
+   - Major technology sub-areas and clusters
+   - IPC/CPC classification analysis
+   - Emerging technology threads
+   - Cross-technology convergence patterns
+
+5. **Prior Art Analysis**
+   - Foundational patents in this space
+   - Most-cited patents and their significance
+   - Patent citation networks
+   - Academic literature crossover
+
+6. **White Space Analysis**
+   - Under-patented technology areas
+   - Gaps between academic research and patent filings
+   - Emerging areas with low patent density
+   - Strategic patenting opportunities
+
+7. **Competitive Patent Positioning**
+   - Head-to-head patent portfolio comparisons
+   - Freedom-to-operate considerations
+   - Potential licensing opportunities
+   - Litigation risk assessment
+
+8. **Future Technology Trajectory**
+   - Patent filing trend predictions
+   - Emerging innovators to watch
+   - Technology convergence opportunities
+   - Strategic recommendations for R&D investment
+`;
+      break;
+
+    case "regulatory":
+      baseQuery = `
+Conduct a comprehensive regulatory intelligence analysis on ${researchSubject} for the automotive industry.
+
+Provide detailed analysis covering:
+
+1. **Regulatory Overview**
+   - Scope and applicability of the regulation/regulatory area
+   - Governing bodies and enforcement authorities
+   - Legislative history and evolution
+   - Current status and effective dates
+
+2. **Key Requirements**
+   - Detailed breakdown of compliance obligations
+   - Technical standards and specifications
+   - Reporting and documentation requirements
+   - Testing and certification procedures
+   - Deadlines and phase-in schedules
+
+3. **Geographic Scope**
+   - EU regulatory framework and requirements
+   - US federal and state regulations
+   - China regulatory landscape
+   - Japan and South Korea requirements
+   - Cross-jurisdictional comparison matrix
+
+4. **Impact on Automotive OEMs**
+   - Direct compliance obligations
+   - Supply chain requirements and flow-down
+   - Product design implications
+   - Manufacturing process changes needed
+   - Cost impact assessment
+   - Timeline pressure points
+
+5. **Impact on Suppliers**
+   - Tier 1 supplier obligations
+   - Tier 2/3 supplier implications
+   - Documentation and traceability requirements
+   - Audit and verification procedures
+
+6. **Compliance Strategy**
+   - Recommended compliance approach
+   - Required organizational capabilities
+   - Technology solutions for compliance
+   - Data management requirements
+   - Audit preparation checklist
+
+7. **Enforcement & Penalties**
+   - Enforcement mechanisms and history
+   - Penalty structures and precedents
+   - Recent enforcement actions
+   - Litigation trends and case law
+
+8. **Regulatory Outlook**
+   - Upcoming changes and amendments
+   - Proposed legislation in pipeline
+   - Industry lobbying positions
+   - Expert predictions and commentary
+   - Strategic recommendations for proactive compliance
+`;
+      break;
+
+    case "competitive":
+      baseQuery = `
+Conduct a comprehensive competitive intelligence analysis for ${researchSubject} in the automotive industry.
+
+Provide detailed analysis covering:
+
+1. **Market Overview**
+   - Market definition, scope, and size
+   - Historical growth and current trajectory
+   - Key market segments and their dynamics
+   - Value chain structure
+
+2. **Competitor Identification & Mapping**
+   - Major competitors (OEMs, suppliers, new entrants)
+   - Market share estimates by competitor
+   - Competitor tier classification (leaders, challengers, niche)
+   - New entrant threat assessment (particularly Chinese/Asian OEMs)
+
+3. **Competitor Deep Dives**
+   For each major competitor, provide:
+   - Company overview and strategy
+   - Product/technology portfolio
+   - Manufacturing footprint and capacity
+   - Financial performance (revenue, margins, R&D spend)
+   - Patent portfolio strength
+   - Recent strategic moves (M&A, partnerships, investments)
+   - Strengths and vulnerabilities
+
+4. **Technology Comparison**
+   - Technology capability matrix across competitors
+   - R&D investment comparison
+   - Patent portfolio comparison
+   - Academic research partnerships
+   - Technology readiness levels
+
+5. **Strategic Positioning Analysis**
+   - Competitive positioning map (price vs. technology)
+   - Value proposition comparison
+   - Go-to-market strategy differences
+   - Geographic presence and expansion plans
+   - Customer/OEM relationship analysis
+
+6. **M&A & Partnership Landscape**
+   - Recent acquisitions and their strategic rationale
+   - Joint ventures and strategic partnerships
+   - Investment activity and funding rounds
+   - Consolidation trends
+
+7. **SWOT Analysis**
+   - Comparative SWOT for top 3-5 competitors
+   - Cross-competitor strength/weakness patterns
+   - Industry-level opportunities and threats
+
+8. **Strategic Implications**
+   - Competitive threats to monitor
+   - Market gaps and white space opportunities
+   - Potential disruption scenarios
+   - Recommended competitive strategies
+   - Key metrics and indicators to track
+`;
+      break;
+
+    default: // custom
+      baseQuery = `
+Conduct comprehensive automotive industry research on: ${researchSubject}
+
+Provide detailed, well-structured analysis with:
+- Executive summary with key findings
+- Detailed analysis with data and statistics
+- Industry context and implications for automotive OEMs, suppliers, and the broader mobility ecosystem
+- Academic research and patent data where relevant
+- SEC filings and financial data where applicable
+- Regulatory considerations
+- Competitive landscape implications
+- Strategic recommendations and conclusions
+
+Ensure all information is:
+- Accurate and well-sourced with citations
+- Current and relevant to the automotive industry
+- Actionable for automotive R&D, procurement, strategy, and regulatory teams
+`;
+  }
+
+  if (researchFocus) {
+    baseQuery += `
+
+**SPECIFIC FOCUS AREAS:**
+${researchFocus}
+
+Please ensure these specific areas receive detailed attention in the analysis.
+`;
+  }
+
+  if (industryContext) {
+    baseQuery += `
+
+**INDUSTRY CONTEXT:**
+${industryContext}
+
+Please tailor the analysis and recommendations with this context in mind.
+`;
+  }
+
+  if (specificQuestions) {
+    baseQuery += `
+
+**SPECIFIC QUESTIONS TO ADDRESS:**
+${specificQuestions}
+
+Please ensure these specific questions are directly answered in the research.
+`;
+  }
+
+  baseQuery += `
+
+**FORMATTING REQUIREMENTS:**
+- Use clear headings and subheadings
+- Include bullet points for easy scanning
+- Provide data tables where appropriate
+- Cite sources for all statistics and facts
+- Include relevant charts/visualizations descriptions
+- Maintain professional automotive industry report quality
+- Structure for consumption by R&D leaders, procurement teams, and strategy executives
+`;
+
+  return baseQuery;
+}
+
+function buildDeliverables(
+  researchType: string,
+  researchSubject: string
+): Deliverable[] {
+  const subjectClean = researchSubject.replace(/[^a-zA-Z0-9\s]/g, "").trim();
+
+  switch (researchType) {
+    case "supplier":
+      return [
+        {
+          type: "csv",
+          description: `${subjectClean} - Supplier Risk Matrix with financial health, ESG scores, regulatory compliance, and geographic risk indicators`,
+        },
+        {
+          type: "docx",
+          description: `${subjectClean} - Executive Summary one-page supplier due diligence overview for procurement leadership`,
+        },
+        {
+          type: "pptx",
+          description: `${subjectClean} - Supplier Intelligence Presentation with risk assessment, competitive alternatives, and recommendations`,
+        },
+      ];
+
+    case "patent":
+      return [
+        {
+          type: "csv",
+          description: `${subjectClean} - Patent Landscape Data including top assignees, filing trends, technology clusters, and citation analysis`,
+        },
+        {
+          type: "docx",
+          description: `${subjectClean} - Executive Summary one-page patent landscape overview for R&D leadership`,
+        },
+        {
+          type: "pptx",
+          description: `${subjectClean} - Patent Landscape Presentation with technology mapping, white space analysis, and strategic recommendations`,
+        },
+      ];
+
+    case "regulatory":
+      return [
+        {
+          type: "csv",
+          description: `${subjectClean} - Regulatory Requirements Checklist with compliance obligations, deadlines, and responsible parties`,
+        },
+        {
+          type: "docx",
+          description: `${subjectClean} - Executive Summary one-page regulatory compliance brief for leadership`,
+        },
+        {
+          type: "pptx",
+          description: `${subjectClean} - Regulatory Intelligence Presentation with compliance roadmap, impact assessment, and action items`,
+        },
+      ];
+
+    case "competitive":
+      return [
+        {
+          type: "csv",
+          description: `${subjectClean} - Competitive Comparison Matrix with technology capabilities, market share, financials, and patent portfolio data`,
+        },
+        {
+          type: "docx",
+          description: `${subjectClean} - Executive Summary one-page competitive landscape overview`,
+        },
+        {
+          type: "pptx",
+          description: `${subjectClean} - Competitive Intelligence Presentation with positioning analysis, SWOT, and strategic recommendations`,
+        },
+      ];
+
+    default:
+      return [
+        {
+          type: "csv",
+          description: `${subjectClean} - Supporting data and analysis tables`,
+        },
+        {
+          type: "docx",
+          description: `${subjectClean} - Executive Summary one-page overview`,
+        },
+        {
+          type: "pptx",
+          description: `${subjectClean} - Executive Presentation with key findings and recommendations`,
+        },
+      ];
+  }
+}
