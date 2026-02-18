@@ -48,7 +48,7 @@ const en = {
   // ─── Data Sources ───
   dataSources: {
     heading: "Proprietary data access your team cannot get elsewhere",
-    subheading: "Takt goes beyond web search. We access paywalled academic publishers, government databases, and financial data through licensed partnerships.",
+    subheading: "Takt goes beyond web search. We access paywalled academic publishers, government databases, and financial data through our specialised content indexes and partnerships.",
   },
 
   // ─── Enterprise CTA ───
@@ -300,7 +300,7 @@ const de: Translations = {
 
   dataSources: {
     heading: "Proprietarer Datenzugang, den Ihr Team sonst nicht bekommt",
-    subheading: "Takt geht uber die Websuche hinaus. Wir greifen auf kostenpflichtige akademische Verlage, Regierungsdatenbanken und Finanzdaten uber lizenzierte Partnerschaften zu.",
+    subheading: "Takt geht uber die Websuche hinaus. Wir greifen auf kostenpflichtige akademische Verlage, Regierungsdatenbanken und Finanzdaten uber unsere spezialisierten Inhaltsindexe und Partnerschaften zu.",
   },
 
   cta: {
