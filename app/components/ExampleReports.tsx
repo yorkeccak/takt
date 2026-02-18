@@ -6,10 +6,9 @@ import { ArrowUpRight } from "lucide-react";
 import { useTranslation } from "@/app/i18n";
 
 const FILE_TYPES = [
-  { ext: "pdf", styles: defaultStyles.pdf },
-  { ext: "pptx", styles: defaultStyles.pptx },
-  { ext: "xlsx", styles: defaultStyles.xlsx },
   { ext: "docx", styles: defaultStyles.docx },
+  { ext: "pptx", styles: defaultStyles.pptx },
+  { ext: "csv", styles: defaultStyles.csv },
 ];
 
 interface ExampleReportsProps {
@@ -21,25 +20,25 @@ export default function ExampleReports({ onSelectExample }: ExampleReportsProps)
 
   const exampleReports = useMemo(() => [
     {
-      id: "5e106dbf-f5e4-4189-8fcb-7a800b2b6dba",
+      id: "525fa52c-2162-4d34-acb1-baa340a372c5",
       title: t("examples.report1Title"),
       subtitle: t("examples.report1Subtitle"),
       type: t("examples.report1Type"),
     },
     {
-      id: "ba7b7848-d338-4272-8499-276f3679a835",
+      id: "6a52abc6-5a98-4a3d-8910-0b6d00e51d22",
       title: t("examples.report2Title"),
       subtitle: t("examples.report2Subtitle"),
       type: t("examples.report2Type"),
     },
     {
-      id: "1e358083-84c7-43a4-af74-a1cffa98e933",
+      id: "03e8a6c4-2e01-4603-b821-16986a265261",
       title: t("examples.report3Title"),
       subtitle: t("examples.report3Subtitle"),
       type: t("examples.report3Type"),
     },
     {
-      id: "22e7a435-7237-4c9a-b3d4-2ebc4b75cbf9",
+      id: "069f4a29-6a35-4fdd-8d25-294ecfd2adec",
       title: t("examples.report4Title"),
       subtitle: t("examples.report4Subtitle"),
       type: t("examples.report4Type"),
