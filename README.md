@@ -74,7 +74,6 @@ Open [http://localhost:3000](http://localhost:3000).
 app/
   api/
     auto-research/       # Research creation, status polling, cancellation
-    enterprise/          # Enterprise inquiry endpoint
     oauth/               # Valyu OAuth token exchange
   components/            # UI components
   lib/                   # Utilities, research history
