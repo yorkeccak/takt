@@ -6,6 +6,8 @@ Built on the [Valyu DeepResearch API](https://docs.valyu.ai/guides/deepresearch-
 
 **[Try the live demo](https://takt.valyu.ai)**
 
+![Takt - AI-powered deep research with professional deliverables](screenshot.png)
+
 ## Features
 
 ### Research modes
