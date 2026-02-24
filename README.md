@@ -1,21 +1,45 @@
-# Takt
+# [Takt](https://takt.valyu.ai)
 
-AI-powered deep research for automotive procurement, R&D, and strategy teams. Generate board-ready reports with deliverables (PDF, PPTX, XLSX, DOCX) from 100+ proprietary and public data sources - in minutes, not weeks.
+AI-powered deep research that generates board-ready reports with professional deliverables (PDF, PPTX, XLSX, DOCX) from 100+ proprietary and public data sources - in minutes, not weeks.
 
 Built on the [Valyu DeepResearch API](https://docs.valyu.ai/guides/deepresearch-quickstart).
 
-**[Live demo](https://takt.valyu.ai)**
+**[Try the live demo](https://takt.valyu.ai)**
 
-## What it does
+## Features
 
-Choose a research type, describe your topic, and get a comprehensive report with downloadable deliverables:
+### Research modes
 
-- **Supplier Intelligence** - Financial health, ESG scoring, LkSG compliance, geographic risk, alternative sourcing
-- **Patent Landscape** - Technology clustering, prior art, white space analysis, competitive IP benchmarking (8.2M+ USPTO patents)
-- **Regulatory Intel** - EU/US/China regulation tracking, compliance timelines, OEM and supplier impact assessments
-- **Competitive Analysis** - Market positioning, technology comparison, M&A landscape, SWOT analysis
+| Mode | What you get |
+|---|---|
+| **Supplier Due Diligence** | Financial health, ESG scoring, LkSG compliance, geographic risk, alternative sourcing recommendations |
+| **Patent Landscape** | Technology clustering, prior art, white space analysis, competitive IP benchmarking across USPTO, EPO, WIPO, CNIPA, JPO |
+| **Regulatory Intelligence** | EU/US/China regulation tracking, compliance timelines, OEM and supplier impact assessments |
+| **Competitive Analysis** | Market positioning, SWOT analysis, technology comparison, M&A landscape |
+| **Custom Research** | Open-ended research on any topic - bring your own prompt |
 
-Each research generates a PDF report, executive summary (DOCX), data tables (CSV), and presentation deck (PPTX).
+### Deliverables
+
+Every research automatically generates four professional outputs:
+
+- **PDF** - Full research report with citations and data visualizations
+- **DOCX** - One-page executive summary for leadership
+- **PPTX** - Presentation deck with findings and recommendations
+- **CSV** - Raw data tables, risk matrices, and supporting analytics
+
+### UI
+
+- Dark and light themes
+- English and German language support
+- Research history with status tracking (stored locally, up to 50 items)
+- Collapsible sidebar with keyboard shortcuts (`←` / `→`)
+- Real-time progress tracking with step-by-step activity feed
+- Pre-built example reports to explore before running your own
+- Mobile responsive
+
+### Shareable reports
+
+Completed reports get a public URL at `/report/{id}` with OpenGraph meta tags for rich previews on Slack, LinkedIn, and email.
 
 ## Data sources
 
@@ -47,7 +71,6 @@ cp .env.example .env.local
 ```
 
 ```env
-NEXT_PUBLIC_APP_MODE=self-hosted
 VALYU_API_KEY=your_valyu_api_key_here
 ```
 
@@ -74,27 +97,12 @@ Open [http://localhost:3000](http://localhost:3000).
 app/
   api/
     auto-research/       # Research creation, status polling, cancellation
-    oauth/               # Valyu OAuth token exchange
-  components/            # UI components
-  lib/                   # Utilities, research history
-  stores/                # Zustand stores (auth, theme)
+  components/            # UI components (form, results, deliverables, sidebar)
+  lib/                   # Utilities, research history, email templates
+  stores/                # Zustand stores (auth, theme, locale)
   report/[id]/           # Shareable public report pages
   page.tsx               # Main application
 ```
-
-## Deployment modes
-
-### Self-hosted (default)
-
-Uses your Valyu API key server-side. No user authentication required. Good for internal teams or demos.
-
-### Valyu mode
-
-Set `NEXT_PUBLIC_APP_MODE=valyu` to enable OAuth authentication. Users sign in with their Valyu account and use their own credits. Requires OAuth client credentials - see `.env.example`.
-
-## Shareable reports
-
-Completed reports can be shared via `/report/{taskId}`. Shared links include OG meta tags for rich previews in Slack, LinkedIn, and email.
 
 ## License
 
@@ -103,5 +111,5 @@ MIT
 ## Links
 
 - [Valyu](https://valyu.ai) - AI search API
-- [API Documentation](https://docs.valyu.ai/guides/deepresearch-quickstart)
+- [API documentation](https://docs.valyu.ai/guides/deepresearch-quickstart)
 - [Valyu JS SDK](https://www.npmjs.com/package/valyu-js)
