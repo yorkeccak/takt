@@ -47,7 +47,6 @@ cp .env.example .env.local
 ```
 
 ```env
-NEXT_PUBLIC_APP_MODE=self-hosted
 VALYU_API_KEY=your_valyu_api_key_here
 ```
 
