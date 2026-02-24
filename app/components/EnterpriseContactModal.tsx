@@ -63,7 +63,7 @@ export default function EnterpriseContactModal({ open, onClose }: EnterpriseCont
         setSubmitSuccess(true);
 
         if (shouldBookCall) {
-          window.open("https://calendly.com/henk-valyu/coffee-chat-with-hendrik", "_blank");
+          window.open(process.env.NEXT_PUBLIC_CALENDLY_URL || "#", "_blank");
         }
 
         setTimeout(() => {

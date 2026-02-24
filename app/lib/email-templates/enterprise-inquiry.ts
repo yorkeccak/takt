@@ -56,7 +56,7 @@ export function EnterpriseInquiryEmail({
 
     <div>
       <a href="mailto:${contactEmail}" style="display: inline-block; background-color: #000000; color: #ffffff; text-decoration: none; padding: 12px 24px; border-radius: 6px; font-size: 14px; font-weight: 500; margin-right: 8px;">Reply</a>
-      ${bookedCall ? `<a href="https://calendly.com/henk-valyu" style="display: inline-block; background-color: #ffffff; color: #000000; text-decoration: none; padding: 12px 24px; border-radius: 6px; font-size: 14px; font-weight: 500; border: 1px solid #e5e7eb;">Calendly</a>` : ""}
+      ${bookedCall ? `<a href="${process.env.CALENDLY_URL || "#"}" style="display: inline-block; background-color: #ffffff; color: #000000; text-decoration: none; padding: 12px 24px; border-radius: 6px; font-size: 14px; font-weight: 500; border: 1px solid #e5e7eb;">Calendly</a>` : ""}
     </div>
 
     <div style="margin-top: 40px; padding-top: 20px; border-top: 1px solid #e5e7eb;">

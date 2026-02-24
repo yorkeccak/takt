@@ -534,7 +534,7 @@ function HomeContent() {
                       </p>
                       <div className="flex flex-col sm:flex-row items-center justify-center gap-3">
                         <a
-                          href="https://calendly.com/henk-valyu/coffee-chat-with-hendrik"
+                          href={process.env.NEXT_PUBLIC_CALENDLY_URL || "#"}
                           target="_blank"
                           rel="noopener noreferrer"
                           className="btn-primary px-6 py-3 text-sm flex items-center gap-2"
