@@ -39,4 +39,4 @@ Open an issue with:
 
 ## Questions
 
-Open an issue or reach out at contact@valyu.ai.
+Open an issue or reach out to the repo contributors.
