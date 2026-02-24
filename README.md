@@ -81,16 +81,6 @@ app/
   page.tsx               # Main application
 ```
 
-## Deployment modes
-
-### Self-hosted (default)
-
-Uses your Valyu API key server-side. No user authentication required. Good for internal teams or demos.
-
-### Valyu mode
-
-Set `NEXT_PUBLIC_APP_MODE=valyu` to enable OAuth authentication. Users sign in with their Valyu account and use their own credits. Requires OAuth client credentials - see `.env.example`.
-
 ## Shareable reports
 
 Completed reports can be shared via `/report/{taskId}`. Shared links include OG meta tags for rich previews in Slack, LinkedIn, and email.
