@@ -88,12 +88,4 @@ Open [http://localhost:3000](http://localhost:3000).
 
 [Next.js 15](https://nextjs.org) / [React 19](https://react.dev) / [Tailwind CSS 4](https://tailwindcss.com) / [Valyu DeepResearch API](https://docs.valyu.ai) / [Zustand](https://zustand.docs.pmnd.rs) / TypeScript
 
-## License
-
-MIT
-
-## Links
-
-- [Valyu](https://valyu.ai) - AI search API
-- [API documentation](https://docs.valyu.ai/guides/deepresearch-quickstart)
-- [Valyu JS SDK](https://www.npmjs.com/package/valyu-js)
+MIT License | [Valyu](https://valyu.ai) | [API docs](https://docs.valyu.ai/guides/deepresearch-quickstart) | [JS SDK](https://www.npmjs.com/package/valyu-js)
