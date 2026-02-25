@@ -70,22 +70,8 @@ git clone https://github.com/yorkeccak/takt.git
 cd takt
 pnpm install
 cp .env.example .env.local
-```
-
-Add your Valyu API key to `.env.local` (get one at [valyu.ai](https://valyu.ai)):
-
-```env
-VALYU_API_KEY=your_valyu_api_key_here
-```
-
-```bash
+# Add your Valyu API key to .env.local (get one at valyu.ai)
 pnpm dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000).
-
-## Stack
-
-[Next.js 15](https://nextjs.org) / [React 19](https://react.dev) / [Tailwind CSS 4](https://tailwindcss.com) / [Valyu DeepResearch API](https://docs.valyu.ai) / [Zustand](https://zustand.docs.pmnd.rs) / TypeScript
-
-MIT License | [Valyu](https://valyu.ai) | [API docs](https://docs.valyu.ai/guides/deepresearch-quickstart) | [JS SDK](https://www.npmjs.com/package/valyu-js)
+Built with [Next.js 15](https://nextjs.org), [React 19](https://react.dev), [Tailwind CSS 4](https://tailwindcss.com), [Valyu DeepResearch API](https://docs.valyu.ai), [Zustand](https://zustand.docs.pmnd.rs), TypeScript. MIT License.
