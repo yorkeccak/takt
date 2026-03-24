@@ -20,25 +20,25 @@ export default function ExampleReports({ onSelectExample }: ExampleReportsProps)
 
   const exampleReports = useMemo(() => [
     {
-      id: "525fa52c-2162-4d34-acb1-baa340a372c5",
+      id: "28d5f351-d118-4f75-b37a-d357db946923",
       title: t("examples.report1Title"),
       subtitle: t("examples.report1Subtitle"),
       type: t("examples.report1Type"),
     },
     {
-      id: "6a52abc6-5a98-4a3d-8910-0b6d00e51d22",
+      id: "749debab-cc2e-46cd-8d4c-2f099d5fdfb5",
       title: t("examples.report2Title"),
       subtitle: t("examples.report2Subtitle"),
       type: t("examples.report2Type"),
     },
     {
-      id: "03e8a6c4-2e01-4603-b821-16986a265261",
+      id: "f72624e7-1ef6-4687-b46e-5fc34dc8558c",
       title: t("examples.report3Title"),
       subtitle: t("examples.report3Subtitle"),
       type: t("examples.report3Type"),
     },
     {
-      id: "069f4a29-6a35-4fdd-8d25-294ecfd2adec",
+      id: "ae8060e2-a9fa-4276-a7ce-7a28c010f5e8",
       title: t("examples.report4Title"),
       subtitle: t("examples.report4Subtitle"),
       type: t("examples.report4Type"),
