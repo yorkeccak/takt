@@ -412,6 +412,136 @@ Provide detailed analysis covering:
 `;
       break;
 
+    case "market":
+      baseQuery = `
+Conduct a comprehensive market sizing and TAM/SAM analysis for ${researchSubject} in the automotive industry.
+
+Provide detailed analysis covering:
+
+1. **Market Definition & Scope**
+   - Clear definition of the addressable market
+   - Market boundaries and segmentation methodology
+   - Total Addressable Market (TAM) with bottom-up and top-down estimates
+   - Serviceable Addressable Market (SAM) with realistic penetration assumptions
+   - Serviceable Obtainable Market (SOM) with competitive positioning factors
+
+2. **Market Size & Growth Projections**
+   - Current market size (USD) with multiple analyst estimates
+   - Historical growth trajectory (5-year lookback)
+   - Forward projections through 2030 with CAGR
+   - Compare estimates from McKinsey, BCG, Roland Berger, and industry analysts
+   - Scenario analysis (conservative, base, aggressive)
+
+3. **Segment Breakdown**
+   - Market size by technology segment (ADAS, connected car, infotainment, central compute, OTA, V2X, BMS, fleet management)
+   - Market size by vehicle type (passenger, commercial, two-wheeler)
+   - Market size by region (North America, Europe, China, Japan/Korea, India, Southeast Asia)
+   - Market size by customer type (OEM, Tier 1, aftermarket)
+   - Embedded software vs. cloud/connected services split
+
+4. **Revenue Pool Analysis**
+   - Per-vehicle software content value and growth trajectory
+   - Revenue distribution across the value chain (OEM vs. Tier 1 vs. tech companies)
+   - EBIT margin comparison by segment and player type
+   - Subscription vs. one-time revenue models
+   - Software-defined vehicle (SDV) revenue pool shift
+
+5. **Key Market Drivers & Inhibitors**
+   - Technology drivers (central compute, zonal architectures, AI/ML)
+   - Regulatory drivers (ADAS mandates, cybersecurity, data privacy)
+   - Consumer demand drivers
+   - Cost and complexity barriers
+   - Competitive dynamics and consolidation trends
+
+6. **Competitive Landscape**
+   - Market share by key player
+   - Strategic positioning (OEMs building in-house vs. outsourcing)
+   - Tech company market entry (Qualcomm, NVIDIA, Google, Amazon, Apple)
+   - Chinese ecosystem players and competitive dynamics
+   - M&A activity and investment flows
+
+7. **Business Case Framework**
+   - Investment requirements for market entry
+   - Typical ramp-up timelines (design win to production revenue)
+   - Break-even analysis and payback periods
+   - Risk factors and sensitivity analysis
+
+8. **Strategic Recommendations**
+   - Market entry or expansion strategies
+   - Partnership and M&A opportunities
+   - Technology investment priorities
+   - Go-to-market approach by segment
+`;
+      break;
+
+    case "production":
+      baseQuery = `
+Conduct a comprehensive production forecast and vehicle sales analysis for ${researchSubject}.
+
+Provide detailed analysis covering:
+
+1. **Production Overview**
+   - Start of Production (SOP) dates and manufacturing locations
+   - Factory details (capacity, workforce, investment, flexibility)
+   - Production ramp-up curve from SOP through peak volume
+   - Annual production volumes by year (historical and projected)
+   - Planned vs. actual production volumes with variance analysis
+
+2. **Ramp-Up Curve Analysis**
+   - Phase 1: Pre-production and pilot builds
+   - Phase 2: Limited production / market launch (Year 1)
+   - Phase 3: Volume ramp-up (Years 2-3)
+   - Phase 4: Peak production (Years 4-5)
+   - Phase 5: Lifecycle management and model year updates
+   - Impact of supply chain disruptions on ramp-up timelines
+   - Multi-factory ramp-up sequencing and regional rollout strategy
+
+3. **Sales Performance**
+   - New vehicle sales by market (US, Europe, China, rest of world)
+   - Monthly and annual sales trends with seasonality
+   - Market share within segment
+   - Sales mix by powertrain (BEV, PHEV, HEV, ICE)
+   - Comparison with direct competitors' sales volumes
+   - OEM sales guidance vs. actual delivery performance
+
+4. **Used Vehicle Market Dynamics**
+   - Average ownership duration and vehicle lifecycle
+   - Resale value curves and depreciation rates (1-year, 3-year, 5-year)
+   - Used vehicle transaction volumes by market
+   - Geographic flow of used vehicles (first-world to developing markets)
+   - Certified pre-owned (CPO) program performance
+   - Impact of EV transition on used vehicle values
+   - Cox Automotive / Manheim used vehicle value index data
+
+5. **Business Case Implications**
+   - Per-vehicle revenue and cost assumptions for Tier 1 suppliers
+   - Production volume impact on supplier business cases
+   - Warranty and service revenue tied to production volumes
+   - Digital services revenue opportunity across vehicle lifecycle
+   - Fleet vs. retail mix impact on business case modeling
+
+6. **Supply Chain & Manufacturing Intelligence**
+   - Key Tier 1 suppliers and component sourcing
+   - Platform sharing and modular production strategies
+   - Semiconductor and battery supply constraints
+   - Capacity utilization rates and shift patterns
+   - Investment in new production lines and technology upgrades
+
+7. **Market Forecast (5-10 Year Outlook)**
+   - Production forecast through end-of-lifecycle
+   - Mid-cycle refresh and successor model planning
+   - Regional production allocation changes
+   - S&P Global Mobility / IHS forecast data where available
+   - Impact of regulatory changes on production plans
+
+8. **Strategic Insights & Recommendations**
+   - Key risks to production and sales forecasts
+   - Opportunities for suppliers aligned to production ramp-up
+   - Business case sensitivity to volume changes
+   - Monitoring indicators and data sources for ongoing tracking
+`;
+      break;
+
     default: // custom
       baseQuery = `
 Conduct comprehensive automotive industry research on: ${researchSubject}
@@ -546,6 +676,38 @@ function buildDeliverables(
         {
           type: "pptx",
           description: `${subjectClean} - Competitive Intelligence Presentation with positioning analysis, SWOT, and strategic recommendations`,
+        },
+      ];
+
+    case "market":
+      return [
+        {
+          type: "csv",
+          description: `${subjectClean} - TAM SAM SOM sizing data with segment breakdown, growth rates, and per-vehicle revenue estimates`,
+        },
+        {
+          type: "docx",
+          description: `${subjectClean} - Executive Summary one-page market sizing overview for strategy leadership`,
+        },
+        {
+          type: "pptx",
+          description: `${subjectClean} - Market Sizing Presentation with TAM waterfall, segment analysis, competitive landscape, and investment thesis`,
+        },
+      ];
+
+    case "production":
+      return [
+        {
+          type: "csv",
+          description: `${subjectClean} - Production volumes, sales data, ramp-up curve figures, depreciation rates, and used vehicle market data by year and region`,
+        },
+        {
+          type: "docx",
+          description: `${subjectClean} - Executive Summary one-page production and sales forecast for business case planning`,
+        },
+        {
+          type: "pptx",
+          description: `${subjectClean} - Production and Sales Intelligence Presentation with ramp-up curves, market forecasts, and business case framework`,
         },
       ];
 
