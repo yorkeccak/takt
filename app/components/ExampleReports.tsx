@@ -32,13 +32,13 @@ export default function ExampleReports({ onSelectExample }: ExampleReportsProps)
       type: t("examples.report2Type"),
     },
     {
-      id: "77d373b1-ce2a-4a39-8074-0e3e1ec06c1f",
+      id: "dba56e23-0fdc-4660-8880-0034641cc3eb",
       title: t("examples.report3Title"),
       subtitle: t("examples.report3Subtitle"),
       type: t("examples.report3Type"),
     },
     {
-      id: "c2d0dd78-4d64-47f9-8eb5-639a731b0c26",
+      id: "1b62cc1e-32e4-443c-80d8-1707ddb3cb26",
       title: t("examples.report4Title"),
       subtitle: t("examples.report4Subtitle"),
       type: t("examples.report4Type"),
