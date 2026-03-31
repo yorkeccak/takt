@@ -32,8 +32,8 @@ export default function EnterpriseContactModal({ open, onClose }: EnterpriseCont
   const industries = useMemo(() => [
     t("enterprise.indOem"), t("enterprise.indTier1"), t("enterprise.indTier23"),
     t("enterprise.indConsulting"), t("enterprise.indBattery"), t("enterprise.indAutonomous"),
-    t("enterprise.indFleet"), t("enterprise.indAftermarket"), t("enterprise.indMobility"),
-    t("enterprise.indOther"),
+    t("enterprise.indFleet"), t("enterprise.indAftermarket"), t("enterprise.indSemiconductor"),
+    t("enterprise.indHyperscaler"), t("enterprise.indMobility"), t("enterprise.indOther"),
   ], [t]);
 
   if (!open) return null;
