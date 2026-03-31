@@ -44,7 +44,7 @@ export default function ExampleReports({ onSelectExample }: ExampleReportsProps)
       type: t("examples.report4Type"),
     },
     {
-      id: "3812a42c-c267-44fd-90fb-871223e20f8a",
+      id: "e2bef0ba-4254-4b01-9916-ce15c1efed01",
       title: t("examples.report5Title"),
       subtitle: t("examples.report5Subtitle"),
       type: t("examples.report5Type"),
