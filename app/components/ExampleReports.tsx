@@ -32,16 +32,28 @@ export default function ExampleReports({ onSelectExample }: ExampleReportsProps)
       type: t("examples.report2Type"),
     },
     {
-      id: "f72624e7-1ef6-4687-b46e-5fc34dc8558c",
+      id: "dba56e23-0fdc-4660-8880-0034641cc3eb",
       title: t("examples.report3Title"),
       subtitle: t("examples.report3Subtitle"),
       type: t("examples.report3Type"),
     },
     {
-      id: "ae8060e2-a9fa-4276-a7ce-7a28c010f5e8",
+      id: "1b62cc1e-32e4-443c-80d8-1707ddb3cb26",
       title: t("examples.report4Title"),
       subtitle: t("examples.report4Subtitle"),
       type: t("examples.report4Type"),
+    },
+    {
+      id: "e2bef0ba-4254-4b01-9916-ce15c1efed01",
+      title: t("examples.report5Title"),
+      subtitle: t("examples.report5Subtitle"),
+      type: t("examples.report5Type"),
+    },
+    {
+      id: "ae8060e2-a9fa-4276-a7ce-7a28c010f5e8",
+      title: t("examples.report6Title"),
+      subtitle: t("examples.report6Subtitle"),
+      type: t("examples.report6Type"),
     },
   ], [t]);
 
@@ -53,7 +65,7 @@ export default function ExampleReports({ onSelectExample }: ExampleReportsProps)
         <div className="h-px flex-1 max-w-16 bg-border" />
       </div>
 
-      <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-2">
         {exampleReports.map((report) => (
           <button
             key={report.id}

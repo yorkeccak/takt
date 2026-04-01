@@ -11,6 +11,8 @@ import {
   ChevronUp,
   Loader2,
   ArrowRight,
+  TrendingUp,
+  BarChart3,
 } from "lucide-react";
 import { useAuthStore } from "@/app/stores/auth-store";
 import { useTranslation } from "@/app/i18n";
@@ -23,7 +25,7 @@ interface AutoResearchFormProps {
   isResearching: boolean;
 }
 
-type ResearchType = "supplier" | "patent" | "regulatory" | "competitive" | "custom";
+type ResearchType = "supplier" | "patent" | "regulatory" | "competitive" | "market" | "production" | "custom";
 
 export default function AutoResearchForm({
   onTaskCreated,
@@ -74,6 +76,20 @@ export default function AutoResearchForm({
       description: t("form.competitiveDesc"),
     },
     {
+      id: "market" as ResearchType,
+      label: t("form.marketLabel"),
+      icon: TrendingUp,
+      placeholder: t("form.marketPlaceholder"),
+      description: t("form.marketDesc"),
+    },
+    {
+      id: "production" as ResearchType,
+      label: t("form.productionLabel"),
+      icon: BarChart3,
+      placeholder: t("form.productionPlaceholder"),
+      description: t("form.productionDesc"),
+    },
+    {
       id: "custom" as ResearchType,
       label: t("form.customLabel"),
       icon: Search,
@@ -87,6 +103,8 @@ export default function AutoResearchForm({
     patent: [t("quickExamples.patent1"), t("quickExamples.patent2"), t("quickExamples.patent3")],
     regulatory: [t("quickExamples.regulatory1"), t("quickExamples.regulatory2"), t("quickExamples.regulatory3")],
     competitive: [t("quickExamples.competitive1"), t("quickExamples.competitive2"), t("quickExamples.competitive3")],
+    market: [t("quickExamples.market1"), t("quickExamples.market2"), t("quickExamples.market3")],
+    production: [t("quickExamples.production1"), t("quickExamples.production2"), t("quickExamples.production3")],
     custom: [],
   }), [t]);
 

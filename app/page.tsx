@@ -25,6 +25,8 @@ import {
   Globe,
   Zap,
   Database,
+  TrendingUp,
+  Swords,
 } from "lucide-react";
 import { ResearchHistoryItem, saveToHistory, updateHistoryStatus } from "./lib/researchHistory";
 import { useAuthStore } from "./stores/auth-store";
@@ -269,7 +271,9 @@ function HomeContent() {
     { icon: Factory, title: t("capabilities.supplierTitle"), desc: t("capabilities.supplierDesc"), highlight: t("capabilities.supplierHighlight") },
     { icon: ScrollText, title: t("capabilities.patentTitle"), desc: t("capabilities.patentDesc"), highlight: t("capabilities.patentHighlight") },
     { icon: Shield, title: t("capabilities.regulatoryTitle"), desc: t("capabilities.regulatoryDesc"), highlight: t("capabilities.regulatoryHighlight") },
-    { icon: BarChart3, title: t("capabilities.competitiveTitle"), desc: t("capabilities.competitiveDesc"), highlight: t("capabilities.competitiveHighlight") },
+    { icon: Swords, title: t("capabilities.competitiveTitle"), desc: t("capabilities.competitiveDesc"), highlight: t("capabilities.competitiveHighlight") },
+    { icon: TrendingUp, title: t("capabilities.marketTitle"), desc: t("capabilities.marketDesc"), highlight: t("capabilities.marketHighlight") },
+    { icon: BarChart3, title: t("capabilities.productionTitle"), desc: t("capabilities.productionDesc"), highlight: t("capabilities.productionHighlight") },
     { icon: Cpu, title: t("capabilities.apiTitle"), desc: t("capabilities.apiDesc"), highlight: t("capabilities.apiHighlight") },
   ], [t]);
 
@@ -497,16 +501,16 @@ function HomeContent() {
                   <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3">
                     {[
                       { name: "USPTO Patents", count: "8.2M+", category: "IP" },
+                      { name: "EPO Espacenet", count: "110M+", category: "IP" },
+                      { name: "WIPO Patents", count: "99M+", category: "IP" },
                       { name: "SEC EDGAR", count: "Filings", category: "Financial" },
-                      { name: "PubMed", count: "36M+", category: "Academic" },
+                      { name: "NHTSA", count: "Recalls", category: "Safety" },
+                      { name: "Euro NCAP", count: "Ratings", category: "Safety" },
+                      { name: "OICA", count: "Production", category: "Industry" },
+                      { name: "IEA EV Data", count: "Global", category: "EV" },
+                      { name: "FRED", count: "840K+ series", category: "Economic" },
+                      { name: "UNECE WP.29", count: "Regulations", category: "Regulatory" },
                       { name: "arXiv", count: "2.4M+", category: "Research" },
-                      { name: "ClinicalTrials.gov", count: "500K+", category: "Healthcare" },
-                      { name: "FRED", count: "Economic", category: "Government" },
-                      { name: "World Bank", count: "Global", category: "Economic" },
-                      { name: "ChEMBL", count: "2.4M+", category: "Chemical" },
-                      { name: "BLS", count: "Labor", category: "Government" },
-                      { name: "DrugBank", count: "Pharma", category: "Healthcare" },
-                      { name: "bioRxiv", count: "Preprints", category: "Academic" },
                       { name: "Web", count: "Billions", category: "General" },
                     ].map((source) => (
                       <div key={source.name} className="p-3 rounded-lg border border-border bg-surface/30 text-center">
