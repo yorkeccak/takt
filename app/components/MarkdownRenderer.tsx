@@ -80,7 +80,7 @@ const MarkdownRenderer: React.FC<MarkdownRendererProps> = ({
         href={href}
         target="_blank"
         rel="noopener noreferrer"
-        className="not-prose inline-flex items-center gap-1 text-[11px] font-medium text-foreground h-[20px] px-2 bg-gray-100 dark:bg-gray-800 border border-border rounded-full no-underline hover:bg-accent transition-colors whitespace-nowrap"
+        className="not-prose inline-flex items-center gap-1 text-[11px] font-medium text-foreground h-[20px] px-2 bg-surface border border-border rounded-full no-underline hover:bg-surface-hover transition-colors whitespace-nowrap"
         style={{ verticalAlign: "baseline" }}
       >
         <Favicon url={href} size={14} className="w-3.5 h-3.5" />
