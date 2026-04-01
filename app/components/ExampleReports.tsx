@@ -79,6 +79,9 @@ export default function ExampleReports({ onSelectExample }: ExampleReportsProps)
                 </span>
                 <ArrowUpRight className="w-3 h-3 text-text-muted opacity-0 group-hover:opacity-100 transition-opacity flex-shrink-0" />
               </div>
+              <p className="text-[10px] text-text-muted leading-snug mb-1 line-clamp-2">
+                {report.subtitle}
+              </p>
               <div className="flex items-center gap-2">
                 <span className="text-[10px] font-medium uppercase tracking-wider text-primary/70 bg-primary/8 px-1.5 py-0.5 rounded">
                   {report.type}
